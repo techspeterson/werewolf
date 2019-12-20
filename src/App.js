@@ -1,33 +1,56 @@
 import React from 'react';
 import Players from "./Players";
+import Roles from "./Players/Roles";
+import DayPhase from "./Phase/DayPhase";
+import NightPhase from "./Phase/NightPhase";
 import './App.css';
 
 class App extends React.Component {
   state = {
     players: [],
     playersFinalised: false,
-    rolesFinalised: false
+    rolesFinalised: false,
+    phase: 0,
+    day: true
   }
 
-  addPlayer = (name) => {
-    let players = this.state.players;
-    const newPlayer = {
-      name: name,
-      role: null
+  finalisePlayers = (players) => {
+    this.setState({ playersFinalised: true, players: players });
+  }
+
+  finaliseRoles = (players) => {
+    this.setState({ rolesFinalised: true, players: players, phase: 1 });
+  }
+
+  renderDayOrNight = () => {
+    return this.state.day ? "Day" : "Night";
+  }
+
+  endPhase = () => {
+    let { day, phase } = this.state;
+    day = !day;
+    this.setState({ day });
+    if (day) {
+      phase++;
+      this.setState({ phase });
     }
-    players.push(newPlayer);
-    this.setState({ players });
-  }
-
-  removePlayer = (player) => {
-    let players = this.state.players
-    players = players.filter(foundPlayer => foundPlayer.name !== player.name);
-    this.setState({ players });
   }
 
   renderPhase = () => {
-    if (!this.state.playersFinalised) {
-      return <PlayerSetup addPlayer={this.addPlayer} removePlayer={this.removePlayer} />;
+    const { phase, players, playersFinalised, rolesFinalised, day } = this.state;
+    if (phase === 0) {
+      if (!playersFinalised) {
+        return <Players players={players} playersFinalised={playersFinalised} finalisePlayers={this.finalisePlayers} />
+      }
+      else if (!rolesFinalised) {
+        return <Roles players={players} rolesFinalise={rolesFinalised} finaliseRoles={this.finaliseRoles} />
+      }
+    }
+    else if (day) {
+      return <DayPhase phase={phase} players={players} playersFinalised={playersFinalised} endPhase={this.endPhase} />
+    }
+    else {
+      return <NightPhase phase={phase} players={players} playersFinalised={playersFinalised} endPhase={this.endPhase} />
     }
   }
 
