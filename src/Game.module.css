@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  justify-content: space-evenly;
+  width: 80vw;
+  color: var(--dark);
+}
+
+.subcontainer {
+  background: rgba(255, 255, 255, 0.7);
+  border: 3px double var(--gold);
+  min-width: 30vw;
+  padding: 0 20px 20px;
+}
+
+.header {
+  color: var(--medium-dark);
+}

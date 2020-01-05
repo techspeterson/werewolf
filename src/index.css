@@ -5,9 +5,22 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-image: url("https://vignette.wikia.nocookie.net/powerlisting/images/0/03/Werewolf_HD.jpg/revision/latest?cb=20140117043025");
+
+  --dark: #06091D;
+  --medium-dark: #312B44;
+  --gold: #F8BF72;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+ul {
+  padding: 0;
+}
+
+li {
+  list-style-type: none;
 }

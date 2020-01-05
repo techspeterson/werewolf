@@ -1,5 +1,6 @@
 import React from "react";
 import AddRole from "./AddRole";
+import styles from '../Game.module.css';
 
 class Roles extends React.Component {
   state = {
@@ -8,18 +9,13 @@ class Roles extends React.Component {
 
   roles = [
     {
-      name: "Villager",
-      team: "village",
-      night: false
+      name: "Werewolf",
+      team: "wolves",
+      night: true
     },
     {
       name: "Bodyguard",
       team: "village",
-      night: true
-    },
-    {
-      name: "Werewolf",
-      team: "wolves",
       night: true
     },
     {
@@ -33,14 +29,9 @@ class Roles extends React.Component {
       night: true
     },
     {
-      name: "Sorceress",
-      team: "wolves",
-      night: true
-    },
-    {
-      name: "Witch",
+      name: "Villager",
       team: "village",
-      night: true
+      night: false
     }
   ];
 
@@ -88,8 +79,8 @@ class Roles extends React.Component {
 
   render() {
     return (
-      <div>
-        <h2>Add Roles</h2>
+      <div className={styles.subcontainer}>
+        <h2 className={styles.header}>Add Roles</h2>
         <AddRole players={this.state.players} roles={this.roles} addRole={this.addRole} />
         <ul>
           {this.renderRoles()}

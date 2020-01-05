@@ -1,6 +1,7 @@
 import React from "react";
 import Player from "./Player";
 import AddPlayerForm from "./AddPlayer";
+import styles from "../Game.module.css";
 
 class SetupPlayers extends React.Component {
   state = {
@@ -36,8 +37,8 @@ class SetupPlayers extends React.Component {
 
   render() {
     return (
-      <div>
-        <h2>Add Players</h2>
+      <div className={styles.subcontainer}>
+        <h2 className={styles.header}>Add Players</h2>
         <AddPlayerForm addPlayer={this.addPlayer} />
         <ul>
           {this.renderPlayers()}

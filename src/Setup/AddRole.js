@@ -14,7 +14,8 @@ class AddRole extends React.Component {
   }
 
   roleSelectOptions = () => {
-    const { roles } = this.props;
+    let { roles } = this.props;
+    roles = roles.filter(role => role.name !== "Villager");
     return roles.map(role => {
       return <option key={role.name} value={role.name}>{role.name}</option>
     });
