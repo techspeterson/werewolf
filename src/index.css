@@ -8,6 +8,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-image: url("https://vignette.wikia.nocookie.net/powerlisting/images/0/03/Werewolf_HD.jpg/revision/latest?cb=20140117043025");
+  background-size: cover;
 
   --dark: #06091D;
   --medium-dark: #312B44;
