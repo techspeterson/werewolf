@@ -1,39 +1,37 @@
 import React from "react";
+import styles from '../Game.module.css';
 
 class DayPhase extends React.Component {
-  endPhase = () => {
-    this.props.endPhase();
+  state = {
+    selection: this.props.players[0].name
   }
 
-  renderResults = () => {
-    let resultsList = [];
-    const { results } = this.props;
-    if (results.deadPlayers.length > 0) {
-      resultsList.push(<li>Dead: {results.deadPlayers.join(", ")}</li>);
-    }
-    else {
-      resultsList.push(<li>No one has died.</li>);
-    }
-    if (results.silenced) {
-      resultsList.push(<li>Silenced: {results.silenced}</li>);
-    }
-    return (
-      <ul>
-        {resultsList}
-      </ul>
-    );
+  endPhase = () => {
+    this.props.endPhase(this.state.selection);
+  }
+
+  updateChoice = (e) => {
+    this.setState({ selection: e.target.value })
+  }
+
+  renderChoices = () => {
+    const players = this.props.players.filter(player => player.alive);
+    return players.map(player => {
+      return <option value={player.name}>{player.name}</option>
+    })
   }
 
   render() {
     const { phase } = this.props;
     return (
       <div>
-        <h2>Day {phase}</h2>
-        {this.renderResults()}
         <p>
           (timer stuff here)
         </p>
-        <button onClick={this.endPhase}>End Day {phase}</button>
+        <select onChange={this.updateChoice}>
+          {this.renderChoices()}
+        </select>
+        <button onClick={this.endPhase}>Submit Choice for Day {phase}</button>
       </div>
     )
   }

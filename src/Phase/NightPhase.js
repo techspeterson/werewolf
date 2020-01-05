@@ -1,7 +1,9 @@
 import React from "react";
+import styles from '../Game.module.css';
 
 class NightPhase extends React.Component {
   state = {
+    players: this.props.players.filter(player => player.alive),
     werewolfVictim: null,
     bodyguardPick: null,
     seerPick: null,
@@ -24,7 +26,7 @@ class NightPhase extends React.Component {
   }
 
   renderWolfSelection = () => {
-    let { players } = this.props;
+    let { players } = this.state;
     const wolves = players.filter(player => player.role.team === "wolves");
     players = players.filter(player => player.role.name !== "Werewolf");
     return (
@@ -40,7 +42,7 @@ class NightPhase extends React.Component {
   updateChoice = (e, role) => {
     console.log("updateChoice called by " + role);
 
-    const { players } = this.props;
+    const { players } = this.state;
     switch (role) {
       case "Bodyguard":
         this.setState({ bodyguardPick: e.target.value });
@@ -61,7 +63,7 @@ class NightPhase extends React.Component {
   }
 
   renderOtherPlayers = () => {
-    let { players } = this.props;
+    let { players } = this.state;
     const nightPlayers = players.filter(player => (player.role.night && player.role.name !== "Werewolf"));
     return nightPlayers.map(activePlayer => {
       players = players.filter(player => player.name !== activePlayer.name);
@@ -81,7 +83,6 @@ class NightPhase extends React.Component {
     const { phase } = this.props;
     return (
       <div>
-        <h2>Night {phase}</h2>
         {this.renderWolfSelection()}
         {this.renderOtherPlayers()}
         <button onClick={this.endPhase}>Submit Choices for Night {phase}</button>

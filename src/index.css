@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Courgette&display=swap');
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -10,6 +12,7 @@ body {
   --dark: #06091D;
   --medium-dark: #312B44;
   --gold: #F8BF72;
+  --red: #BA1F11;
 }
 
 code {

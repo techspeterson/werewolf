@@ -15,3 +15,16 @@
 .header {
   color: var(--medium-dark);
 }
+
+.alert {
+  font-weight: bold;
+  color: var(--red);
+}
+
+.wolf {
+  color: var(--red);
+}
+
+.villager {
+  color: var(--medium-dark);
+}

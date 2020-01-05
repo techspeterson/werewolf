@@ -1,4 +1,5 @@
 import React from "react";
+import styles from '../Game.module.css';
 
 class Player extends React.Component {
   renderRole() {
@@ -11,7 +12,7 @@ class Player extends React.Component {
   render() {
     const { player } = this.props;
     return (
-      <li>
+      <li className={styles[player.role.team === "wolves" ? "wolf" : "villager"]}>
         {player.name}
         {this.renderRole()}
       </li>

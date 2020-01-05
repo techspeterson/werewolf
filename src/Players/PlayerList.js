@@ -25,7 +25,7 @@ class Players extends React.Component {
   render() {
     return (
       <div>
-        <h3>Alive:</h3>
+        <h3>Alive ({this.getPlayers(true).length} / {this.state.players.length}):</h3>
         {this.getPlayers(true)}
         <h3>Dead:</h3>
         {this.renderDeadPlayers()}
