@@ -1,9 +1,10 @@
 import React from 'react';
-import Players from "./Players";
-import Roles from "./Players/Roles";
+import SetupPlayers from "./Setup/PlayerList";
+import PlayerList from "./Players/PlayerList";
+import Roles from "./Setup/Roles";
 import DayPhase from "./Phase/DayPhase";
 import NightPhase from "./Phase/NightPhase";
-import './App.css';
+import styles from './App.module.css';
 
 class App extends React.Component {
   state = {
@@ -11,7 +12,11 @@ class App extends React.Component {
     playersFinalised: false,
     rolesFinalised: false,
     phase: 0,
-    day: true
+    day: true,
+    results: {
+      deadPlayers: [],
+      silenced: null
+    }
   }
 
   finalisePlayers = (players) => {
@@ -22,41 +27,75 @@ class App extends React.Component {
     this.setState({ rolesFinalised: true, players: players, phase: 1 });
   }
 
-  renderDayOrNight = () => {
-    return this.state.day ? "Day" : "Night";
+  endDayPhase = () => {
+    this.setState({ day: false });
   }
 
-  endPhase = () => {
-    let { day, phase } = this.state;
-    day = !day;
-    this.setState({ day });
+  endNightPhase = (selections) => {
+    let { players } = this.state;
+    const { werewolfVictim, bodyguardPick } = selections;
+    let deadPlayers = [];
+    let silenced = null;
+
+    if (werewolfVictim && werewolfVictim !== bodyguardPick) {
+      const deadPlayer = players.find(player => player.name === werewolfVictim);
+      deadPlayer.alive = false;
+      deadPlayers.push(deadPlayer.name);
+
+      players.splice(players.indexOf(deadPlayer), 1, deadPlayer);
+    }
+
+    const results = {
+      deadPlayers: deadPlayers,
+      silenced: silenced
+    };
+    this.setState({ players, results });
+
+    let { phase } = this.state;
+    this.setState({ day: true });
+    phase++;
+    this.setState({ phase });
+  }
+
+  renderDayOrNight = () => {
+    const { day, players, phase, results } = this.state;
     if (day) {
-      phase++;
-      this.setState({ phase });
+      return <DayPhase phase={phase} players={players} endPhase={this.endDayPhase} results={results} />
+    }
+    else {
+      return <NightPhase phase={phase} players={players} endPhase={this.endNightPhase} />
     }
   }
 
   renderPhase = () => {
-    const { phase, players, playersFinalised, rolesFinalised, day } = this.state;
+    const { phase, players, playersFinalised, rolesFinalised } = this.state;
     if (phase === 0) {
       if (!playersFinalised) {
-        return <Players players={players} playersFinalised={playersFinalised} finalisePlayers={this.finalisePlayers} />
+        return <SetupPlayers players={players} playersFinalised={playersFinalised} finalisePlayers={this.finalisePlayers} />
       }
       else if (!rolesFinalised) {
         return <Roles players={players} rolesFinalise={rolesFinalised} finaliseRoles={this.finaliseRoles} />
       }
     }
-    else if (day) {
-      return <DayPhase phase={phase} players={players} playersFinalised={playersFinalised} endPhase={this.endPhase} />
-    }
     else {
-      return <NightPhase phase={phase} players={players} playersFinalised={playersFinalised} endPhase={this.endPhase} />
+      return (
+        <div className={styles.container}>
+          <div>
+            <h2>Players:</h2>
+            <PlayerList players={players} />
+          </div>
+          <div>
+            {this.renderDayOrNight()}
+          </div>
+        </div>
+      )
     }
   }
 
   render() {
     return (
-      <div className="App">
+      <div className={styles.App}>
+        <h1>Werewolf Moderator</h1>
         {this.renderPhase()}
       </div>
     );

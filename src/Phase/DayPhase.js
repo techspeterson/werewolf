@@ -1,17 +1,38 @@
 import React from "react";
-import Players from "../Players"
 
 class DayPhase extends React.Component {
   endPhase = () => {
     this.props.endPhase();
   }
 
+  renderResults = () => {
+    let resultsList = [];
+    const { results } = this.props;
+    if (results.deadPlayers.length > 0) {
+      resultsList.push(<li>Dead: {results.deadPlayers.join(", ")}</li>);
+    }
+    else {
+      resultsList.push(<li>No one has died.</li>);
+    }
+    if (results.silenced) {
+      resultsList.push(<li>Silenced: {results.silenced}</li>);
+    }
+    return (
+      <ul>
+        {resultsList}
+      </ul>
+    );
+  }
+
   render() {
-    const { phase, players, playersFinalised } = this.props;
+    const { phase } = this.props;
     return (
       <div>
         <h2>Day {phase}</h2>
-        <Players players={players} playersFinalised={playersFinalised} />
+        {this.renderResults()}
+        <p>
+          (timer stuff here)
+        </p>
         <button onClick={this.endPhase}>End Day {phase}</button>
       </div>
     )

@@ -1,8 +1,15 @@
 import React from "react";
 
 class AddRole extends React.Component {
+  filterPlayers = () => {
+    const { players } = this.props;
+    return players.filter(player => {
+      return !player.role;
+    });
+  }
+
   state = {
-    player: this.props.players[0].name,
+    player: this.filterPlayers()[0].name,
     role: this.props.roles[0].name
   }
 
@@ -14,7 +21,7 @@ class AddRole extends React.Component {
   }
 
   playerSelectOptions = () => {
-    const { players } = this.props;
+    const players = this.filterPlayers();
     return players.map(player => {
       return <option key={player.name} value={player.name}>{player.name}</option>
     });
@@ -32,6 +39,7 @@ class AddRole extends React.Component {
     e.preventDefault();
     const { player, role } = this.state;
     this.props.addRole(player, role);
+    this.setState({ player: this.filterPlayers()[0].name })
   }
 
   render() {

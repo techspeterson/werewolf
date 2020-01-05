@@ -1,10 +1,16 @@
 import React from "react";
-import Players from "../Players"
-import Player from "../Players/Player"
 
 class NightPhase extends React.Component {
+  state = {
+    werewolfVictim: null,
+    bodyguardPick: null,
+    seerPick: null,
+  }
+
   endPhase = () => {
-    this.props.endPhase();
+    const { werewolfVictim, bodyguardPick } = this.state;
+    const selections = { werewolfVictim, bodyguardPick };
+    this.props.endPhase(selections);
   }
 
   renderActionChoices = (players) => {
@@ -13,17 +19,45 @@ class NightPhase extends React.Component {
     })
   }
 
+  updateWolfVictim = (e) => {
+    this.setState({ werewolfVictim: e.target.value });
+  }
+
   renderWolfSelection = () => {
     let { players } = this.props;
+    const wolves = players.filter(player => player.role.team === "wolves");
     players = players.filter(player => player.role.name !== "Werewolf");
     return (
       <li>
-        Werewolves:
-        <select>
+        Werewolves ({wolves.map(player => player.name).join(", ")}):
+        <select onChange={this.updateWolfVictim}>
           {this.renderActionChoices(players)}
         </select>
       </li>
     )
+  }
+
+  updateChoice = (e, role) => {
+    console.log("updateChoice called by " + role);
+
+    const { players } = this.props;
+    switch (role) {
+      case "Bodyguard":
+        this.setState({ bodyguardPick: e.target.value });
+        break;
+      case "Seer":
+        const choice = players.find(player => player.name === e.target.value)
+        this.setState({ seerPick: choice.role.name });
+        break;
+      default:
+        break;
+    }
+  }
+
+  renderSeerChoice = (player) => {
+    if (player.role.name === "Seer" && this.state.seerPick) {
+      return <span> ({this.state.seerPick})</span>
+    }
   }
 
   renderOtherPlayers = () => {
@@ -33,23 +67,24 @@ class NightPhase extends React.Component {
       players = players.filter(player => player.name !== activePlayer.name);
       return (
         <li>
-          {activePlayer.name} ({activePlayer.role.name}):
-          <select>
-            {this.renderActionChoices(players)}
+          {activePlayer.role.name} ({activePlayer.name}):
+          <select onChange={(e) => this.updateChoice(e, activePlayer.role.name)}>
+            {this.renderActionChoices(players.filter(player => player.name !== activePlayer.name))}
           </select>
+          {this.renderSeerChoice(activePlayer)}
         </li>
       );
     });
   }
 
   render() {
-    const { phase, players, playersFinalised } = this.props;
+    const { phase } = this.props;
     return (
       <div>
         <h2>Night {phase}</h2>
         {this.renderWolfSelection()}
         {this.renderOtherPlayers()}
-        <button onClick={this.endPhase}>End Night {phase}</button>
+        <button onClick={this.endPhase}>Submit Choices for Night {phase}</button>
       </div>
     )
   }
