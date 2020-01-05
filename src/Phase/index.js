@@ -15,22 +15,24 @@ class Phase extends React.Component {
   }
 
   renderAlert = () => {
-    let alertList = [];
-    const { alert } = this.props;
-    if (alert.deadPlayers.length > 0) {
-      alertList.push(<li>{alert.deadPlayers.join(", ")} died.</li>);
+    if (this.props.phase > 1) {
+      let alertList = [];
+      const { alert } = this.props;
+      if (alert.deadPlayers.length > 0) {
+        alertList.push(<li>{alert.deadPlayers.join(", ")} died.</li>);
+      }
+      else {
+        alertList.push(<li>No one has died.</li>);
+      }
+      if (alert.silenced) {
+        alertList.push(<li>{alert.silenced} was silenced.</li>);
+      }
+      return (
+        <ul className={styles.alert}>
+          {alertList}
+        </ul>
+      );
     }
-    else {
-      alertList.push(<li>No one has died.</li>);
-    }
-    if (alert.silenced) {
-      alertList.push(<li>{alert.silenced} was silenced.</li>);
-    }
-    return (
-      <ul className={styles.alert}>
-        {alertList}
-      </ul>
-    );
   }
 
   render() {

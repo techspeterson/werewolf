@@ -9,6 +9,7 @@
   background: rgba(255, 255, 255, 0.7);
   border: 3px double var(--gold);
   min-width: 30vw;
+  max-width: 500px;
   padding: 0 20px 20px;
   margin-bottom: 20px;
 }

@@ -56,21 +56,22 @@ class Game extends React.Component {
   }
 
   endDayPhase = (selection) => {
-    let deadPlayers = [];
+    if (this.state.phase > 1) {
+      let deadPlayers = [];
+      deadPlayers = this.killPlayer(selection, deadPlayers);
 
-    deadPlayers = this.killPlayer(selection, deadPlayers);
+      const alert = {
+        deadPlayers: deadPlayers
+      };
+      this.setState({ alert });
 
-    const alert = {
-      deadPlayers: deadPlayers
-    };
-    this.setState({ alert });
+      this.checkPlayerCounts();
+    }
 
     this.setState({ day: false });
-    this.checkPlayerCounts();
   }
 
   endNightPhase = (selections) => {
-    let { players } = this.state;
     const { werewolfVictim, bodyguardPick } = selections;
     let deadPlayers = [];
     let silenced = null;

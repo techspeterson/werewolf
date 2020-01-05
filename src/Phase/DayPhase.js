@@ -23,17 +23,29 @@ class DayPhase extends React.Component {
 
   render() {
     const { phase } = this.props;
-    return (
-      <div>
-        <p>
-          [Timer to be added...?]
+    if (phase > 1) {
+      return (
+        <div>
+          <p>
+            [Timer to be added...?]
         </p>
-        <select onChange={this.updateChoice}>
-          {this.renderChoices()}
-        </select>
-        <button onClick={this.endPhase}>Submit Choice for Day {phase}</button>
-      </div>
-    )
+          <select onChange={this.updateChoice}>
+            {this.renderChoices()}
+          </select>
+          <button onClick={this.endPhase}>Submit Choice for Day {phase}</button>
+        </div>
+      )
+    }
+    else {
+      return (
+        <div>
+          <p>
+            Use this day to explain the rules of the game and let everybody introduce their characters.
+          </p>
+          <button onClick={this.endPhase}>End Day {phase}</button>
+        </div>
+      )
+    }
   }
 }
 
