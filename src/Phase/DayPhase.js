@@ -26,7 +26,7 @@ class DayPhase extends React.Component {
     return (
       <div>
         <p>
-          (timer stuff here)
+          [Timer to be added...?]
         </p>
         <select onChange={this.updateChoice}>
           {this.renderChoices()}

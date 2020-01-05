@@ -24,6 +24,7 @@ class App extends React.Component {
         <h1 className={styles.header}>Werewolf Moderator</h1>
         {this.renderGameOverMessage()}
         <Game gameOverMessage={this.gameOverMessage} />
+        <footer>&copy; Tessa Peterson 2020</footer>
       </div>
     );
   }

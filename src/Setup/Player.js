@@ -1,4 +1,5 @@
 import React from "react";
+import styles from "../Game.module.css"
 
 class Player extends React.Component {
   removePlayer = () => {
@@ -14,7 +15,7 @@ class Player extends React.Component {
   }
 
   renderDeleteButton() {
-    return <span onClick={this.removePlayer} role="img">❌</span>;
+    return <span onClick={this.removePlayer} className={styles.removePlayer}>✖</span>;
   }
 
   render() {

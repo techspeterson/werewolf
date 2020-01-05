@@ -7,6 +7,7 @@ class NightPhase extends React.Component {
     werewolfVictim: null,
     bodyguardPick: null,
     seerPick: null,
+    spellcasterPick: null,
   }
 
   endPhase = () => {
@@ -16,9 +17,11 @@ class NightPhase extends React.Component {
   }
 
   renderActionChoices = (players) => {
-    return players.map(player => {
+    let choices = [<option value="">Select...</option>];
+    players = players.map(player => {
       return <option value={player.name}>{player.name}</option>
-    })
+    });
+    return choices.concat(players);
   }
 
   updateWolfVictim = (e) => {
@@ -30,7 +33,7 @@ class NightPhase extends React.Component {
     const wolves = players.filter(player => player.role.team === "wolves");
     players = players.filter(player => player.role.name !== "Werewolf");
     return (
-      <li>
+      <li key="wolves">
         Werewolves ({wolves.map(player => player.name).join(", ")}):
         <select onChange={this.updateWolfVictim}>
           {this.renderActionChoices(players)}
@@ -39,17 +42,18 @@ class NightPhase extends React.Component {
     )
   }
 
-  updateChoice = (e, role) => {
-    console.log("updateChoice called by " + role);
-
+  updateChoice = (name, role) => {
     const { players } = this.state;
     switch (role) {
       case "Bodyguard":
-        this.setState({ bodyguardPick: e.target.value });
+        this.setState({ bodyguardPick: name });
         break;
       case "Seer":
-        const choice = players.find(player => player.name === e.target.value)
+        const choice = players.find(player => player.name === name)
         this.setState({ seerPick: choice.role.name });
+        break;
+      case "Spellcaster":
+        this.setState({ spellcasterPick: name });
         break;
       default:
         break;
@@ -63,15 +67,15 @@ class NightPhase extends React.Component {
   }
 
   renderOtherPlayers = () => {
-    let { players } = this.state;
+    const { players } = this.state;
     const nightPlayers = players.filter(player => (player.role.night && player.role.name !== "Werewolf"));
     return nightPlayers.map(activePlayer => {
-      players = players.filter(player => player.name !== activePlayer.name);
+      const selectOptions = players.filter(player => player.name !== activePlayer.name);
       return (
-        <li>
+        <li key={activePlayer.role.name}>
           {activePlayer.role.name} ({activePlayer.name}):
-          <select onChange={(e) => this.updateChoice(e, activePlayer.role.name)}>
-            {this.renderActionChoices(players.filter(player => player.name !== activePlayer.name))}
+          <select onChange={(e) => this.updateChoice(e.target.value, activePlayer.role.name)}>
+            {this.renderActionChoices(selectOptions)}
           </select>
           {this.renderSeerChoice(activePlayer)}
         </li>

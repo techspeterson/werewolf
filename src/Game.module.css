@@ -10,10 +10,12 @@
   border: 3px double var(--gold);
   min-width: 30vw;
   padding: 0 20px 20px;
+  margin-bottom: 20px;
 }
 
 .header {
   color: var(--medium-dark);
+  font-family: 'Courgette', cursive;
 }
 
 .alert {
@@ -27,4 +29,18 @@
 
 .villager {
   color: var(--medium-dark);
+}
+
+.removePlayer {
+  color: var(--red);
+}
+
+.removePlayer::before {
+  content: ' ';
+}
+
+@media only screen and (max-width: 800px) {
+  .container {
+    flex-direction: column-reverse;
+  }
 }

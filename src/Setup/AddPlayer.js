@@ -12,12 +12,14 @@ class AddPlayer extends React.Component {
   submitForm = (e) => {
     e.preventDefault();
     this.props.addPlayer(this.state.name);
+    let input = document.getElementById("newPlayer");
+    input.value = "";
   }
 
   render() {
     return (
       <form onSubmit={this.submitForm}>
-        <input placeholder="Player name" onChange={this.updateName} />
+        <input id="newPlayer" placeholder="Player name" onChange={this.updateName} />
         <input type="submit" value="Add Player" />
       </form>
     );
