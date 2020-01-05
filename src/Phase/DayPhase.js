@@ -1,9 +1,8 @@
 import React from "react";
-import styles from '../Game.module.css';
 
 class DayPhase extends React.Component {
   state = {
-    selection: this.props.players[0].name
+    selection: null
   }
 
   endPhase = () => {
@@ -15,10 +14,14 @@ class DayPhase extends React.Component {
   }
 
   renderChoices = () => {
-    const players = this.props.players.filter(player => player.alive);
-    return players.map(player => {
+    let choices = [<option value="">Select...</option>];
+
+    let players = this.props.players.filter(player => player.alive);
+    players = players.map(player => {
       return <option value={player.name}>{player.name}</option>
-    })
+    });
+
+    return choices.concat(players);
   }
 
   render() {

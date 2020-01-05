@@ -1,5 +1,4 @@
 import React from "react";
-import styles from '../Game.module.css';
 
 class NightPhase extends React.Component {
   state = {
@@ -11,16 +10,18 @@ class NightPhase extends React.Component {
   }
 
   endPhase = () => {
-    const { werewolfVictim, bodyguardPick } = this.state;
-    const selections = { werewolfVictim, bodyguardPick };
-    this.props.endPhase(selections);
+    const { werewolfVictim, bodyguardPick, spellcasterPick } = this.state;
+    // const selections = { werewolfVictim, bodyguardPick, spellcasterPick };
+    this.props.endPhase({ werewolfVictim, bodyguardPick, spellcasterPick });
   }
 
-  renderActionChoices = (players) => {
+  renderActionChoices(players) {
     let choices = [<option value="">Select...</option>];
+
     players = players.map(player => {
       return <option value={player.name}>{player.name}</option>
     });
+
     return choices.concat(players);
   }
 
@@ -30,8 +31,10 @@ class NightPhase extends React.Component {
 
   renderWolfSelection = () => {
     let { players } = this.state;
+
     const wolves = players.filter(player => player.role.team === "wolves");
     players = players.filter(player => player.role.name !== "Werewolf");
+
     return (
       <li key="wolves">
         Werewolves ({wolves.map(player => player.name).join(", ")}):
@@ -69,13 +72,14 @@ class NightPhase extends React.Component {
   renderOtherPlayers = () => {
     const { players } = this.state;
     const nightPlayers = players.filter(player => (player.role.night && player.role.name !== "Werewolf"));
+
     return nightPlayers.map(activePlayer => {
-      const selectOptions = players.filter(player => player.name !== activePlayer.name);
+      // const selectOptions = players.filter(player => player.name !== activePlayer.name);
       return (
         <li key={activePlayer.role.name}>
           {activePlayer.role.name} ({activePlayer.name}):
           <select onChange={(e) => this.updateChoice(e.target.value, activePlayer.role.name)}>
-            {this.renderActionChoices(selectOptions)}
+            {this.renderActionChoices(players)}
           </select>
           {this.renderSeerChoice(activePlayer)}
         </li>
