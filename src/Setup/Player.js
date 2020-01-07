@@ -1,10 +1,21 @@
 import React from "react";
+import { connect } from "react-redux";
+import { updatePlayerAction } from "../actions"
 import styles from "../Game.module.css"
+
+function mapStateToProps(state) {
+  return {
+    players: state.players
+  };
+}
 
 class Player extends React.Component {
   removePlayer = () => {
-    const { player, removePlayer } = this.props;
-    removePlayer(player)
+    let { player, players } = this.props;
+
+    players = players.filter(foundPlayer => foundPlayer.name !== player.name);
+
+    this.props.dispatch(updatePlayerAction(players));
   }
 
   renderRole() {
@@ -30,4 +41,4 @@ class Player extends React.Component {
   }
 }
 
-export default Player;
+export default connect(mapStateToProps)(Player);

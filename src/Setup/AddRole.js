@@ -1,20 +1,29 @@
 import React from "react";
+import { connect } from "react-redux";
+import { updatePlayerAction } from "../actions";
+
+function mapStateToProps(state) {
+  return {
+    players: state.players
+  };
+}
 
 class AddRole extends React.Component {
-  filterPlayers = () => {
-    const { players } = this.props;
-    return players.filter(player => {
-      return !player.role;
-    });
-  }
+  // filterPlayers = () => {
+  //   const { players } = this.props;
+  //   return players.filter(player => {
+  //     return !player.role;
+  //   });
+  // }
 
   state = {
-    player: this.props.players[0].name,
-    role: this.props.roles[0].name
+    playerName: this.props.players[0].name,
+    roleName: this.props.roles[0].name
   }
 
   roleSelectOptions = () => {
     const { roles } = this.props;
+
     return roles.map(role => {
       return <option key={role.name} value={role.name}>{role.name}</option>
     });
@@ -22,23 +31,37 @@ class AddRole extends React.Component {
 
   playerSelectOptions = () => {
     const { players } = this.props;
+
     return players.map(player => {
       return <option key={player.name} value={player.name}>{player.name}</option>
     });
   }
 
   updatePlayer = (e) => {
-    this.setState({ player: e.target.value });
+    this.setState({ playerName: e.target.value });
   }
 
   updateRole = (e) => {
-    this.setState({ role: e.target.value });
+    this.setState({ roleName: e.target.value });
+  }
+
+  addRole = (playerName, roleName) => {
+    let { players, roles } = this.props;
+    players = Array.from(players);
+
+    let playerToBeUpdated = players.find(foundPlayer => foundPlayer.name === playerName);
+    const role = roles.find(foundRole => foundRole.name === roleName);
+    playerToBeUpdated.role = role;
+
+    // players.splice(players.indexOf(playerToBeUpdated), 1, playerToBeUpdated);
+
+    this.props.dispatch(updatePlayerAction(players));
   }
 
   submitForm = (e) => {
     e.preventDefault();
-    const { player, role } = this.state;
-    this.props.addRole(player, role);
+    const { playerName, roleName } = this.state;
+    this.addRole(playerName, roleName);
   }
 
   render() {
@@ -56,4 +79,4 @@ class AddRole extends React.Component {
   }
 }
 
-export default AddRole;
+export default connect(mapStateToProps)(AddRole);

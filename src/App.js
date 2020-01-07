@@ -1,11 +1,15 @@
 import React from 'react';
 import Game from "./Game";
 import styles from "./App.module.css";
+import { createStore } from "redux";
+import { Provider } from "react-redux";
+import reducer from "./reducer";
 
 class App extends React.Component {
+  store = createStore(reducer);
+
   state = {
-    message: null,
-    initState: null
+    message: null
   }
 
   gameOverMessage = (message) => {
@@ -21,13 +25,16 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className={styles.App}>
-        <h1 className={styles.header}>Werewolf Moderator</h1>
-        {this.renderGameOverMessage()}
-        <Game gameOverMessage={this.gameOverMessage} />
-        {/* <button onClick={this.resetGame}>Reset</button> */}
-        <footer>&copy; Tessa Peterson 2020</footer>
-      </div>
+      <Provider store={this.store}>
+        <div className={styles.App}>
+          <h1 className={styles.header}>Werewolf Moderator</h1>
+          {this.renderGameOverMessage()}
+          <Game gameOverMessage={this.gameOverMessage} />
+          {/* <button onClick={this.resetGame}>Reset</button> */}
+          <footer>&copy; Tessa Peterson 2020</footer>
+        </div>
+      </Provider>
+
     );
   }
 }

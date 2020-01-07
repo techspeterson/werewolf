@@ -1,37 +1,24 @@
 import React from "react";
+import { connect } from "react-redux";
+import { finalisePlayersAction } from "../actions"
 import Player from "./Player";
 import AddPlayerForm from "./AddPlayer";
 import styles from "../Game.module.css";
 
+function mapStateToProps(state) {
+  return {
+    players: state.players
+  };
+}
+
 class SetupPlayers extends React.Component {
-  state = {
-    players: this.props.players
-  }
-
-  addPlayer = (name) => {
-    let players = this.state.players;
-    const newPlayer = {
-      name: name,
-      role: null,
-      alive: true
-    }
-    players.push(newPlayer);
-    this.setState({ players });
-  }
-
-  removePlayer = (player) => {
-    let players = this.state.players
-    players = players.filter(foundPlayer => foundPlayer.name !== player.name);
-    this.setState({ players });
-  }
-
   finalisePlayers = () => {
-    this.props.finalisePlayers(this.state.players);
+    this.props.dispatch(finalisePlayersAction())
   }
 
   renderPlayers = () => {
-    return this.state.players.map(player => {
-      return <Player key={player.name} player={player} removePlayer={this.removePlayer} />
+    return this.props.players.map(player => {
+      return <Player key={player.name} player={player} />
     });
   }
 
@@ -39,7 +26,7 @@ class SetupPlayers extends React.Component {
     return (
       <div className={styles.subcontainer}>
         <h2 className={styles.header}>Add Players</h2>
-        <AddPlayerForm addPlayer={this.addPlayer} />
+        <AddPlayerForm />
         <ul>
           {this.renderPlayers()}
         </ul>
@@ -49,4 +36,4 @@ class SetupPlayers extends React.Component {
   }
 }
 
-export default SetupPlayers;
+export default connect(mapStateToProps)(SetupPlayers);

@@ -1,4 +1,12 @@
 import React from "react";
+import { connect } from "react-redux";
+import { updatePlayerAction } from "../actions"
+
+function mapStateToProps(state) {
+  return {
+    players: state.players
+  };
+}
 
 class AddPlayer extends React.Component {
   state = {
@@ -9,9 +17,20 @@ class AddPlayer extends React.Component {
     this.setState({ name: e.target.value });
   }
 
+  addPlayer = (playerName) => {
+    let players = Array.from(this.props.players);
+    const newPlayer = {
+      name: playerName,
+      role: null,
+      alive: true
+    }
+    players.push(newPlayer);
+    this.props.dispatch(updatePlayerAction(players));
+  }
+
   submitForm = (e) => {
     e.preventDefault();
-    this.props.addPlayer(this.state.name);
+    this.addPlayer(this.state.name);
     let input = document.getElementById("newPlayer");
     input.value = "";
   }
@@ -26,4 +45,4 @@ class AddPlayer extends React.Component {
   }
 }
 
-export default AddPlayer;
+export default connect(mapStateToProps)(AddPlayer);

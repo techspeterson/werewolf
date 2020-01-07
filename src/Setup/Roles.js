@@ -1,12 +1,16 @@
 import React from "react";
+import { connect } from "react-redux";
+import { updatePlayerAction, finaliseRolesAction, incrementDayAction } from "../actions";
 import AddRole from "./AddRole";
 import styles from '../Game.module.css';
 
-class Roles extends React.Component {
-  state = {
-    players: this.props.players
-  }
+function mapStateToProps(state) {
+  return {
+    players: state.players
+  };
+}
 
+class Roles extends React.Component {
   roles = [
     {
       name: "Werewolf",
@@ -36,8 +40,10 @@ class Roles extends React.Component {
   ];
 
   renderRoles = () => {
-    const { players } = this.state;
+    const { players } = this.props;
+
     let playersWithRoles = players.filter(player => player.role);
+
     return playersWithRoles.map(player => {
       return (
         <li key={player.name}>
@@ -48,23 +54,27 @@ class Roles extends React.Component {
   }
 
   addRole = (playerName, roleName) => {
-    const { players } = this.state;
+    let { players } = this.props;
+    players = Array.from(players);
+
     let playerToBeUpdated = players.find(foundPlayer => foundPlayer.name === playerName);
     const role = this.roles.find(foundRole => foundRole.name === roleName);
     playerToBeUpdated.role = role;
-    players.splice(players.indexOf(playerToBeUpdated), 1, playerToBeUpdated);
-    this.setState({ players });
+
+    this.props.dispatch(updatePlayerAction(players));
   }
 
   finaliseRoles = () => {
-    const { players } = this.state;
+    const { players } = this.props;
+
     for (let player of players) {
       if (!player.role) {
         this.addRole(player.name, "Villager");
       }
     }
 
-    this.props.finaliseRoles(players);
+    this.props.dispatch(finaliseRolesAction());
+    this.props.dispatch(incrementDayAction());
   }
 
   renderFinaliseRolesButton = () => {
@@ -79,7 +89,7 @@ class Roles extends React.Component {
     return (
       <div className={styles.subcontainer}>
         <h2 className={styles.header}>Add Roles</h2>
-        <AddRole players={this.state.players} roles={this.roles} addRole={this.addRole} />
+        <AddRole roles={this.roles} />
         <ul>
           {this.renderRoles()}
         </ul>
@@ -89,4 +99,4 @@ class Roles extends React.Component {
   }
 }
 
-export default Roles;
+export default connect(mapStateToProps)(Roles);

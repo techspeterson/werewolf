@@ -1,33 +1,35 @@
 import React from "react";
+import { connect } from "react-redux";
 import SetupPlayers from "./Setup/PlayerList";
 import PlayerList from "./Players/PlayerList";
 import Roles from "./Setup/Roles";
 import Phase from "./Phase";
 import styles from './Game.module.css';
 
+function mapStateToProps(state) {
+  const { players, playersFinalised, rolesFinalised, dayCount, isDay, alert } = state;
+  return { players, playersFinalised, rolesFinalised, dayCount, isDay, alert };
+}
+
 class Game extends React.Component {
-  state = {
-    players: [],
-    playersFinalised: false,
-    rolesFinalised: false,
-    dayCount: 0,
-    isDay: true,
-    alert: {
-      deadPlayers: [],
-      silenced: null
-    }
-  }
+  // state = {
+  //   players: [],
+  //   playersFinalised: false,
+  //   rolesFinalised: false,
+  //   dayCount: 0,
+  //   isDay: true,
+  //   alert: {
+  //     deadPlayers: [],
+  //     silenced: null
+  //   }
+  // }
 
-  finalisePlayers = (players) => {
-    this.setState({ playersFinalised: true, players: players });
-  }
-
-  finaliseRoles = (players) => {
-    this.setState({ rolesFinalised: true, players: players, dayCount: 1 });
-  }
+  // finaliseRoles = (players) => {
+  //   this.setState({ rolesFinalised: true, players: players, dayCount: 1 });
+  // }
 
   checkPlayerCounts = () => {
-    const players = this.state.players.filter(player => player.alive);
+    const players = this.props.players.filter(player => player.alive);
     const wolves = players.filter(player => player.role.team === "wolves");
     const { gameOverMessage } = this.props;
 
@@ -40,7 +42,7 @@ class Game extends React.Component {
   }
 
   killPlayer = (playerName, deadPlayers) => {
-    const { players } = this.state;
+    const { players } = this.props;
 
     const deadPlayer = players.find(player => player.name === playerName);
     deadPlayer.alive = false;
@@ -79,7 +81,7 @@ class Game extends React.Component {
     const alert = { deadPlayers, silenced };
     this.setState({ alert });
 
-    let { dayCount } = this.state;
+    let { dayCount } = this.props;
     this.setState({ isDay: true });
     dayCount++;
     this.setState({ dayCount });
@@ -87,17 +89,17 @@ class Game extends React.Component {
   }
 
   renderSetup() {
-    const { players, playersFinalised, rolesFinalised } = this.state;
+    const { playersFinalised, rolesFinalised } = this.props;
     if (!playersFinalised) {
-      return <SetupPlayers players={players} playersFinalised={playersFinalised} finalisePlayers={this.finalisePlayers} />
+      return <SetupPlayers />
     }
     else if (!rolesFinalised) {
-      return <Roles players={players} rolesFinalise={rolesFinalised} finaliseRoles={this.finaliseRoles} />
+      return <Roles />
     }
   }
 
   render() {
-    const { dayCount, players, isDay, alert } = this.state;
+    const { dayCount, players, isDay, alert } = this.props;
     if (!dayCount) {
       return (
         <div className={styles.container}>
@@ -121,4 +123,4 @@ class Game extends React.Component {
   }
 }
 
-export default Game;
+export default connect(mapStateToProps)(Game);
