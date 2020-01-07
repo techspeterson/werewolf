@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { updatePlayerAction, finaliseRolesAction, incrementDayAction } from "../actions";
+import roles from "../rolesList";
 import AddRole from "./AddRole";
 import styles from '../Game.module.css';
 
@@ -11,34 +12,6 @@ function mapStateToProps(state) {
 }
 
 class Roles extends React.Component {
-  roles = [
-    {
-      name: "Werewolf",
-      team: "wolves",
-      night: true
-    },
-    {
-      name: "Bodyguard",
-      team: "village",
-      night: true
-    },
-    {
-      name: "Seer",
-      team: "village",
-      night: true
-    },
-    {
-      name: "Spellcaster",
-      team: "village",
-      night: true
-    },
-    {
-      name: "Villager",
-      team: "village",
-      night: false
-    }
-  ];
-
   renderRoles = () => {
     const { players } = this.props;
 
@@ -58,7 +31,7 @@ class Roles extends React.Component {
     players = Array.from(players);
 
     let playerToBeUpdated = players.find(foundPlayer => foundPlayer.name === playerName);
-    const role = this.roles.find(foundRole => foundRole.name === roleName);
+    const role = roles.find(foundRole => foundRole.name === roleName);
     playerToBeUpdated.role = role;
 
     this.props.dispatch(updatePlayerAction(players));

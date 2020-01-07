@@ -1,4 +1,12 @@
 import React from "react";
+import { connect } from "react-redux";
+
+function mapStateToProps(state) {
+  return {
+    players: state.players,
+    dayCount: state.dayCount
+  };
+}
 
 class DayPhase extends React.Component {
   state = {
@@ -52,4 +60,4 @@ class DayPhase extends React.Component {
   }
 }
 
-export default DayPhase;
+export default connect(mapStateToProps)(DayPhase);

@@ -1,16 +1,26 @@
 import React from "react";
+import { connect } from "react-redux";
 import styles from '../Game.module.css';
 import DayPhase from "./DayPhase";
 import NightPhase from "./NightPhase";
 
+function mapStateToProps(state) {
+  return {
+    isDay: state.isDay,
+    dayCount: state.dayCount,
+    alert: state.alert
+  };
+}
+
 class Phase extends React.Component {
   renderDayOrNight = () => {
-    const { isDay, players, dayCount } = this.props;
+    const { isDay } = this.props;
+
     if (isDay) {
-      return <DayPhase dayCount={dayCount} players={players} endPhase={this.props.endDayPhase} />
+      return <DayPhase endPhase={this.props.endDayPhase} />
     }
     else {
-      return <NightPhase dayCount={dayCount} players={players} endPhase={this.props.endNightPhase} />
+      return <NightPhase endPhase={this.props.endNightPhase} />
     }
   }
 
@@ -52,4 +62,4 @@ class Phase extends React.Component {
   }
 }
 
-export default Phase;
+export default connect(mapStateToProps)(Phase);

@@ -1,14 +1,19 @@
 import React from "react";
+import { connect } from "react-redux";
 import Player from "./Player";
 
-class Players extends React.Component {
-  state = {
-    players: this.props.players
-  }
+function mapStateToProps(state) {
+  return {
+    players: state.players,
+    dayCount: state.dayCount
+  };
+}
 
-  getPlayers = (living) => {
-    const { players } = this.state;
-    return players.filter(player => player.alive === living)
+class Players extends React.Component {
+  getPlayers = (isLiving) => {
+    const { players } = this.props;
+
+    return players.filter(player => player.alive === isLiving)
       .map(player => <Player key={player.name} player={player} />);
   }
 
@@ -25,7 +30,7 @@ class Players extends React.Component {
   render() {
     return (
       <div>
-        <h3>Alive ({this.getPlayers(true).length} / {this.state.players.length}):</h3>
+        <h3>Alive ({this.getPlayers(true).length} / {this.props.players.length}):</h3>
         {this.getPlayers(true)}
         <h3>Dead:</h3>
         {this.renderDeadPlayers()}
@@ -34,4 +39,4 @@ class Players extends React.Component {
   }
 }
 
-export default Players;
+export default connect(mapStateToProps)(Players);

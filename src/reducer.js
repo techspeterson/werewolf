@@ -1,4 +1,4 @@
-import { UPDATE_PLAYERS, FINALISE_PLAYERS, FINALISE_ROLES, INCREMENT_DAY_COUNT } from "./actions"
+import { UPDATE_PLAYERS, FINALISE_PLAYERS, FINALISE_ROLES, INCREMENT_DAY_COUNT, TOGGLE_PHASE, SET_ALERT } from "./actions"
 
 const initialState = {
   message: null,
@@ -28,6 +28,12 @@ export default function reducer(state = initialState, action) {
       break;
     case INCREMENT_DAY_COUNT:
       newState.dayCount++;
+      break;
+    case TOGGLE_PHASE:
+      newState.isDay = !newState.isDay;
+      break;
+    case SET_ALERT:
+      newState.alert = action.alert;
       break;
     default:
       break;

@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import { updatePlayerAction, incrementDayAction, togglePhaseAction, setAlertAction } from "./actions";
 import SetupPlayers from "./Setup/PlayerList";
 import PlayerList from "./Players/PlayerList";
 import Roles from "./Setup/Roles";
@@ -24,10 +25,6 @@ class Game extends React.Component {
   //   }
   // }
 
-  // finaliseRoles = (players) => {
-  //   this.setState({ rolesFinalised: true, players: players, dayCount: 1 });
-  // }
-
   checkPlayerCounts = () => {
     const players = this.props.players.filter(player => player.alive);
     const wolves = players.filter(player => player.role.team === "wolves");
@@ -42,32 +39,37 @@ class Game extends React.Component {
   }
 
   killPlayer = (playerName, deadPlayers) => {
-    const { players } = this.props;
+    let { players } = this.props;
+    players = Array.from(players);
 
     const deadPlayer = players.find(player => player.name === playerName);
     deadPlayer.alive = false;
     deadPlayers.push(deadPlayer.name);
-    players.splice(players.indexOf(deadPlayer), 1, deadPlayer);
+    // players.splice(players.indexOf(deadPlayer), 1, deadPlayer);
 
-    this.setState({ players });
+    // this.setState({ players });
+
+    this.props.dispatch(updatePlayerAction(players));
 
     return deadPlayers;
   }
 
   endDayPhase = (selection) => {
-    if (this.state.dayCount > 1) {
+    if (this.props.dayCount > 1) {
       let deadPlayers = [];
       deadPlayers = this.killPlayer(selection, deadPlayers);
 
       const alert = {
         deadPlayers: deadPlayers
       };
-      this.setState({ alert });
+      // this.setState({ alert });
+      this.props.dispatch(setAlertAction(alert));
 
       this.checkPlayerCounts();
     }
 
-    this.setState({ isDay: false });
+    // this.setState({ isDay: false });
+    this.props.dispatch(togglePhaseAction());
   }
 
   endNightPhase = ({ werewolfVictim, bodyguardPick, spellcasterPick }) => {
@@ -79,12 +81,15 @@ class Game extends React.Component {
     }
 
     const alert = { deadPlayers, silenced };
-    this.setState({ alert });
+    // this.setState({ alert });
+    this.props.dispatch(setAlertAction(alert));
 
-    let { dayCount } = this.props;
-    this.setState({ isDay: true });
-    dayCount++;
-    this.setState({ dayCount });
+    // let { dayCount } = this.props;
+    // this.setState({ isDay: true });
+    this.props.dispatch(togglePhaseAction());
+    // dayCount++;
+    // this.setState({ dayCount });
+    this.props.dispatch(incrementDayAction());
     this.checkPlayerCounts();
   }
 
@@ -99,7 +104,8 @@ class Game extends React.Component {
   }
 
   render() {
-    const { dayCount, players, isDay, alert } = this.props;
+    const { dayCount } = this.props;
+
     if (!dayCount) {
       return (
         <div className={styles.container}>
@@ -112,10 +118,10 @@ class Game extends React.Component {
         <div className={styles.container}>
           <div className={styles.subcontainer}>
             <h2 className={styles.header}>Players:</h2>
-            <PlayerList players={players} />
+            <PlayerList />
           </div>
           <div className={styles.subcontainer}>
-            <Phase isDay={isDay} players={players} dayCount={dayCount} alert={alert} endDayPhase={this.endDayPhase} endNightPhase={this.endNightPhase} />
+            <Phase endDayPhase={this.endDayPhase} endNightPhase={this.endNightPhase} />
           </div>
         </div>
       )

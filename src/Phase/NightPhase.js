@@ -1,8 +1,15 @@
 import React from "react";
+import { connect } from "react-redux";
+
+function mapStateToProps(state) {
+  return {
+    players: state.players.filter(player => player.alive),
+    dayCount: state.dayCount
+  };
+}
 
 class NightPhase extends React.Component {
   state = {
-    players: this.props.players.filter(player => player.alive),
     werewolfVictim: null,
     bodyguardPick: null,
     seerPick: null,
@@ -29,23 +36,24 @@ class NightPhase extends React.Component {
   }
 
   renderWolfSelection = () => {
-    let { players } = this.state;
+    const { players } = this.props;
 
     const wolves = players.filter(player => player.role.team === "wolves");
-    players = players.filter(player => player.role.name !== "Werewolf");
+    const villagers = players.filter(player => player.role.name !== "Werewolf");
 
     return (
       <li key="wolves">
         Werewolves ({wolves.map(player => player.name).join(", ")}):
         <select onChange={this.updateWolfVictim}>
-          {this.renderActionChoices(players)}
+          {this.renderActionChoices(villagers)}
         </select>
       </li>
     )
   }
 
   updateChoice = (name, role) => {
-    const { players } = this.state;
+    const { players } = this.props;
+
     switch (role) {
       case "Bodyguard":
         this.setState({ bodyguardPick: name });
@@ -69,7 +77,7 @@ class NightPhase extends React.Component {
   }
 
   renderOtherPlayers = () => {
-    const { players } = this.state;
+    const { players } = this.props;
     const nightPlayers = players.filter(player => (player.role.night && player.role.name !== "Werewolf"));
 
     return nightPlayers.map(activePlayer => {
@@ -98,4 +106,4 @@ class NightPhase extends React.Component {
   }
 }
 
-export default NightPhase;
+export default connect(mapStateToProps)(NightPhase);

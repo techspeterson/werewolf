@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { updatePlayerAction } from "../actions";
+import roles from "../rolesList";
 
 function mapStateToProps(state) {
   return {
@@ -18,12 +19,10 @@ class AddRole extends React.Component {
 
   state = {
     playerName: this.props.players[0].name,
-    roleName: this.props.roles[0].name
+    roleName: roles[0].name
   }
 
   roleSelectOptions = () => {
-    const { roles } = this.props;
-
     return roles.map(role => {
       return <option key={role.name} value={role.name}>{role.name}</option>
     });
@@ -46,7 +45,7 @@ class AddRole extends React.Component {
   }
 
   addRole = (playerName, roleName) => {
-    let { players, roles } = this.props;
+    let { players } = this.props;
     players = Array.from(players);
 
     let playerToBeUpdated = players.find(foundPlayer => foundPlayer.name === playerName);
