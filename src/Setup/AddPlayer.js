@@ -8,6 +8,10 @@ function mapStateToProps(state) {
   };
 }
 
+const mapDispatchToProps = {
+  updatePlayerAction
+}
+
 class AddPlayer extends React.Component {
   state = {
     name: null
@@ -25,7 +29,7 @@ class AddPlayer extends React.Component {
       alive: true
     }
     players.push(newPlayer);
-    this.props.dispatch(updatePlayerAction(players));
+    this.props.updatePlayerAction(players);
   }
 
   submitForm = (e) => {
@@ -45,4 +49,4 @@ class AddPlayer extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(AddPlayer);
+export default connect(mapStateToProps, mapDispatchToProps)(AddPlayer);

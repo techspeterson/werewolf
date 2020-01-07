@@ -11,9 +11,13 @@ function mapStateToProps(state) {
   };
 }
 
+const mapDispatchToProps = {
+  finalisePlayersAction
+}
+
 class SetupPlayers extends React.Component {
   finalisePlayers = () => {
-    this.props.dispatch(finalisePlayersAction())
+    this.props.finalisePlayersAction();
   }
 
   renderPlayers = () => {
@@ -36,4 +40,4 @@ class SetupPlayers extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(SetupPlayers);
+export default connect(mapStateToProps, mapDispatchToProps)(SetupPlayers);

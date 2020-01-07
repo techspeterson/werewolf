@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import { updatePlayerAction } from "../actions";
 import roles from "../rolesList";
 
 function mapStateToProps(state) {
@@ -44,23 +43,10 @@ class AddRole extends React.Component {
     this.setState({ roleName: e.target.value });
   }
 
-  addRole = (playerName, roleName) => {
-    let { players } = this.props;
-    players = Array.from(players);
-
-    let playerToBeUpdated = players.find(foundPlayer => foundPlayer.name === playerName);
-    const role = roles.find(foundRole => foundRole.name === roleName);
-    playerToBeUpdated.role = role;
-
-    // players.splice(players.indexOf(playerToBeUpdated), 1, playerToBeUpdated);
-
-    this.props.dispatch(updatePlayerAction(players));
-  }
-
   submitForm = (e) => {
     e.preventDefault();
     const { playerName, roleName } = this.state;
-    this.addRole(playerName, roleName);
+    this.props.addRole(playerName, roleName);
   }
 
   render() {

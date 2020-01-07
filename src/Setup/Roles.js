@@ -11,6 +11,12 @@ function mapStateToProps(state) {
   };
 }
 
+const mapDispatchToProps = {
+  updatePlayerAction,
+  finaliseRolesAction,
+  incrementDayAction
+}
+
 class Roles extends React.Component {
   renderRoles = () => {
     const { players } = this.props;
@@ -34,7 +40,7 @@ class Roles extends React.Component {
     const role = roles.find(foundRole => foundRole.name === roleName);
     playerToBeUpdated.role = role;
 
-    this.props.dispatch(updatePlayerAction(players));
+    this.props.updatePlayerAction(players);
   }
 
   finaliseRoles = () => {
@@ -46,23 +52,21 @@ class Roles extends React.Component {
       }
     }
 
-    this.props.dispatch(finaliseRolesAction());
-    this.props.dispatch(incrementDayAction());
+    this.props.finaliseRolesAction();
+    this.props.incrementDayAction();
   }
 
   renderFinaliseRolesButton = () => {
-    if (!this.props.rolesFinalised) {
-      return (
-        <button onClick={this.finaliseRoles}>Finalise Roles</button>
-      )
-    }
+    return (
+      <button onClick={this.finaliseRoles}>Finalise Roles</button>
+    )
   }
 
   render() {
     return (
       <div className={styles.subcontainer}>
         <h2 className={styles.header}>Add Roles</h2>
-        <AddRole roles={this.roles} />
+        <AddRole roles={this.roles} addRole={this.addRole} />
         <ul>
           {this.renderRoles()}
         </ul>
@@ -72,4 +76,4 @@ class Roles extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(Roles);
+export default connect(mapStateToProps, mapDispatchToProps)(Roles);

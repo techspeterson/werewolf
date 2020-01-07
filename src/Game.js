@@ -13,18 +13,6 @@ function mapStateToProps(state) {
 }
 
 class Game extends React.Component {
-  // state = {
-  //   players: [],
-  //   playersFinalised: false,
-  //   rolesFinalised: false,
-  //   dayCount: 0,
-  //   isDay: true,
-  //   alert: {
-  //     deadPlayers: [],
-  //     silenced: null
-  //   }
-  // }
-
   checkPlayerCounts = () => {
     const players = this.props.players.filter(player => player.alive);
     const wolves = players.filter(player => player.role.team === "wolves");
@@ -45,9 +33,6 @@ class Game extends React.Component {
     const deadPlayer = players.find(player => player.name === playerName);
     deadPlayer.alive = false;
     deadPlayers.push(deadPlayer.name);
-    // players.splice(players.indexOf(deadPlayer), 1, deadPlayer);
-
-    // this.setState({ players });
 
     this.props.dispatch(updatePlayerAction(players));
 
@@ -62,13 +47,10 @@ class Game extends React.Component {
       const alert = {
         deadPlayers: deadPlayers
       };
-      // this.setState({ alert });
       this.props.dispatch(setAlertAction(alert));
 
       this.checkPlayerCounts();
     }
-
-    // this.setState({ isDay: false });
     this.props.dispatch(togglePhaseAction());
   }
 
@@ -81,15 +63,11 @@ class Game extends React.Component {
     }
 
     const alert = { deadPlayers, silenced };
-    // this.setState({ alert });
     this.props.dispatch(setAlertAction(alert));
 
-    // let { dayCount } = this.props;
-    // this.setState({ isDay: true });
     this.props.dispatch(togglePhaseAction());
-    // dayCount++;
-    // this.setState({ dayCount });
     this.props.dispatch(incrementDayAction());
+
     this.checkPlayerCounts();
   }
 
