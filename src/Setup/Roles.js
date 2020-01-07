@@ -57,14 +57,12 @@ class Roles extends React.Component {
   }
 
   finaliseRoles = () => {
-    let { players } = this.state;
-    let player;
-    for (player of players) {
+    const { players } = this.state;
+    for (let player of players) {
       if (!player.role) {
         this.addRole(player.name, "Villager");
       }
     }
-    console.log(players);
 
     this.props.finaliseRoles(players);
   }

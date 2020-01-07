@@ -14,28 +14,28 @@ class DayPhase extends React.Component {
   }
 
   renderChoices = () => {
-    let choices = [<option value="">Select...</option>];
+    let choices = [<option value="" key="default">Select...</option>];
 
     let players = this.props.players.filter(player => player.alive);
     players = players.map(player => {
-      return <option value={player.name}>{player.name}</option>
+      return <option value={player.name} key={player.name}>{player.name}</option>
     });
 
     return choices.concat(players);
   }
 
   render() {
-    const { phase } = this.props;
-    if (phase > 1) {
+    const { dayCount } = this.props;
+    if (dayCount > 1) {
       return (
         <div>
           <p>
             [Timer to be added...?]
-        </p>
+          </p>
           <select onChange={this.updateChoice}>
             {this.renderChoices()}
           </select>
-          <button onClick={this.endPhase}>Submit Choice for Day {phase}</button>
+          <button onClick={this.endPhase}>Submit Choice for Day {dayCount}</button>
         </div>
       )
     }
@@ -45,7 +45,7 @@ class DayPhase extends React.Component {
           <p>
             Use this day to explain the rules of the game and let everybody introduce their characters.
           </p>
-          <button onClick={this.endPhase}>End Day {phase}</button>
+          <button onClick={this.endPhase}>End Day {dayCount}</button>
         </div>
       )
     }

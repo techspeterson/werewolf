@@ -4,7 +4,8 @@ import styles from "./App.module.css";
 
 class App extends React.Component {
   state = {
-    message: null
+    message: null,
+    initState: null
   }
 
   gameOverMessage = (message) => {
@@ -24,6 +25,7 @@ class App extends React.Component {
         <h1 className={styles.header}>Werewolf Moderator</h1>
         {this.renderGameOverMessage()}
         <Game gameOverMessage={this.gameOverMessage} />
+        {/* <button onClick={this.resetGame}>Reset</button> */}
         <footer>&copy; Tessa Peterson 2020</footer>
       </div>
     );

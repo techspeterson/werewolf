@@ -5,29 +5,31 @@ import NightPhase from "./NightPhase";
 
 class Phase extends React.Component {
   renderDayOrNight = () => {
-    const { day, players, phase } = this.props;
-    if (day) {
-      return <DayPhase phase={phase} players={players} endPhase={this.props.endDayPhase} />
+    const { isDay, players, dayCount } = this.props;
+    if (isDay) {
+      return <DayPhase dayCount={dayCount} players={players} endPhase={this.props.endDayPhase} />
     }
     else {
-      return <NightPhase phase={phase} players={players} endPhase={this.props.endNightPhase} />
+      return <NightPhase dayCount={dayCount} players={players} endPhase={this.props.endNightPhase} />
     }
   }
 
   renderAlert = () => {
-    if (this.props.phase > 1) {
+    if (this.props.dayCount > 1) {
       let alertList = [];
       const { alert } = this.props;
 
       if (alert.deadPlayers.length > 0) {
-        alertList.push(<li>{alert.deadPlayers.join(", ")} died.</li>);
+        alert.deadPlayers.forEach((player) => {
+          alertList.push(<li key={player}>{player} has died.</li>);
+        });
       }
       else {
-        alertList.push(<li>No one has died.</li>);
+        alertList.push(<li key="noDeath">No one has died.</li>);
       }
 
       if (alert.silenced) {
-        alertList.push(<li>{alert.silenced} has been silenced.</li>);
+        alertList.push(<li key={alert.silenced}>{alert.silenced} has been silenced.</li>);
       }
 
       return (
@@ -39,10 +41,10 @@ class Phase extends React.Component {
   }
 
   render() {
-    const { day, phase } = this.props;
+    const { isDay, dayCount } = this.props;
     return (
       <div>
-        <h2 className={styles.header}>{day ? "Day" : "Night"} {phase}</h2>
+        <h2 className={styles.header}>{isDay ? "Day" : "Night"} {dayCount}</h2>
         {this.renderAlert()}
         {this.renderDayOrNight()}
       </div>

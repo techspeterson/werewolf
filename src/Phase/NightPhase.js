@@ -11,15 +11,14 @@ class NightPhase extends React.Component {
 
   endPhase = () => {
     const { werewolfVictim, bodyguardPick, spellcasterPick } = this.state;
-    // const selections = { werewolfVictim, bodyguardPick, spellcasterPick };
     this.props.endPhase({ werewolfVictim, bodyguardPick, spellcasterPick });
   }
 
   renderActionChoices(players) {
-    let choices = [<option value="">Select...</option>];
+    let choices = [<option value="" key="default">Select...</option>];
 
     players = players.map(player => {
-      return <option value={player.name}>{player.name}</option>
+      return <option value={player.name} key={player.name}>{player.name}</option>
     });
 
     return choices.concat(players);
@@ -88,12 +87,12 @@ class NightPhase extends React.Component {
   }
 
   render() {
-    const { phase } = this.props;
+    const { dayCount } = this.props;
     return (
       <div>
         {this.renderWolfSelection()}
         {this.renderOtherPlayers()}
-        <button onClick={this.endPhase}>Submit Choices for Night {phase}</button>
+        <button onClick={this.endPhase}>Submit Choices for Night {dayCount}</button>
       </div>
     )
   }

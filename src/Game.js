@@ -10,8 +10,8 @@ class Game extends React.Component {
     players: [],
     playersFinalised: false,
     rolesFinalised: false,
-    phase: 0,
-    day: true,
+    dayCount: 0,
+    isDay: true,
     alert: {
       deadPlayers: [],
       silenced: null
@@ -23,17 +23,13 @@ class Game extends React.Component {
   }
 
   finaliseRoles = (players) => {
-    this.setState({ rolesFinalised: true, players: players, phase: 1 });
+    this.setState({ rolesFinalised: true, players: players, dayCount: 1 });
   }
 
   checkPlayerCounts = () => {
-    console.log("checking player counts");
-
     const players = this.state.players.filter(player => player.alive);
-    const { gameOverMessage } = this.props;
-
     const wolves = players.filter(player => player.role.team === "wolves");
-    console.log(wolves.length + " wolves left");
+    const { gameOverMessage } = this.props;
 
     if (!wolves.length) {
       gameOverMessage("There are no wolves left. Villagers win!");
@@ -46,7 +42,8 @@ class Game extends React.Component {
   killPlayer = (playerName, deadPlayers) => {
     const { players } = this.state;
 
-    const deadPlayer = players.find(player => player.name === playerName); deadPlayer.alive = false;
+    const deadPlayer = players.find(player => player.name === playerName);
+    deadPlayer.alive = false;
     deadPlayers.push(deadPlayer.name);
     players.splice(players.indexOf(deadPlayer), 1, deadPlayer);
 
@@ -56,7 +53,7 @@ class Game extends React.Component {
   }
 
   endDayPhase = (selection) => {
-    if (this.state.phase > 1) {
+    if (this.state.dayCount > 1) {
       let deadPlayers = [];
       deadPlayers = this.killPlayer(selection, deadPlayers);
 
@@ -68,7 +65,7 @@ class Game extends React.Component {
       this.checkPlayerCounts();
     }
 
-    this.setState({ day: false });
+    this.setState({ isDay: false });
   }
 
   endNightPhase = ({ werewolfVictim, bodyguardPick, spellcasterPick }) => {
@@ -82,10 +79,10 @@ class Game extends React.Component {
     const alert = { deadPlayers, silenced };
     this.setState({ alert });
 
-    let { phase } = this.state;
-    this.setState({ day: true });
-    phase++;
-    this.setState({ phase });
+    let { dayCount } = this.state;
+    this.setState({ isDay: true });
+    dayCount++;
+    this.setState({ dayCount });
     this.checkPlayerCounts();
   }
 
@@ -100,8 +97,8 @@ class Game extends React.Component {
   }
 
   render() {
-    const { phase, players, day, alert } = this.state;
-    if (!phase) {
+    const { dayCount, players, isDay, alert } = this.state;
+    if (!dayCount) {
       return (
         <div className={styles.container}>
           {this.renderSetup()}
@@ -116,7 +113,7 @@ class Game extends React.Component {
             <PlayerList players={players} />
           </div>
           <div className={styles.subcontainer}>
-            <Phase day={day} players={players} phase={phase} alert={alert} endDayPhase={this.endDayPhase} endNightPhase={this.endNightPhase} />
+            <Phase isDay={isDay} players={players} dayCount={dayCount} alert={alert} endDayPhase={this.endDayPhase} endNightPhase={this.endNightPhase} />
           </div>
         </div>
       )
