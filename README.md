@@ -1,68 +1,47 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Werewolf App
 
-## Available Scripts
+A browser-based tool to assist moderators for the Werewolf party game. Built in React 16.12.0
 
-In the project directory, you can run:
+**View on Netlify: https://techspeterson-werewolf.netlify.com/**
 
-### `yarn start`
+## About
+This app is intended as an aid for Werewolf moderators, allowing them to track game progress, player status (including roles, and alive/dead status), and choices made during day and night phases.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Roles currently supported
+- Villager
+- Werewolf
+- Bodyguard
+- Seer
+- Spellcaster
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## How to run locally
+Yarn commands supported by create-react-app applications are supported here. Run `yarn start` in the project directory to run the app (in development mode) in the web browser. The page will reload automatically if any edits are made while the app is running. Run `yarn build` to build for production.
 
-### `yarn test`
+## How to use
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Game setup
+The **Add Players** interface is displayed upon starting the app. Use the form to enter the names of the players. Remove a player from the list by clicking the ✖ next to their name. Clicking the **Finalise Players** button will lock in the current list of players.
 
-### `yarn build`
+From here, roles (including the werewolf role, and any other special roles) can be added to any number of players. Select the role from the first drop-down and the player's name from the second drop-down, and click **Add Role**  to confirm. A player's role can be overwritten by repeating this process.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Clicking the **Finalise Roles** will automatically assign the Villager role to any players that have not been assigned a role, and end the setup phase.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+### Gameplay cycle
+Upon finishing the game setup, the app will now begin the game's day/night cycle, starting at Day 1. The full list of **Players** (including roles) is now visible and separated into **Alive** and **Dead** categories, and the ratio of living player count to total player count is also displayed.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+The other half of the display will show the current phase's actions, as well as any alerts (eg. announcement of player death) following the previous phase's events.
 
-### `yarn eject`
+#### Day phase
+**Day 1** is an introductory day, reserved for the moderator to explain the rules of the game and for the players to introduce their characters. No voting takes place on this day.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+From **Day 2 onwards** the players are given a time limit (typically ten minutes) to have discussion and potentially vote for someone to execute that day. If the players reach a majority vote, enter that player's name using the drop-down form, and that player will be recorded as dead. If a majority vote is not reached, submit without selecting a name. Either way, the game will now proceed to the following night phase.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+#### Night phase
+During night phases, the app will allow the moderator to input the selections for any roles (notably the werewolf team) that are able to act during the night, if their players are still alive. Select the targeted player from the drop-down next to the role name if/when that player or team chooses to target someone. If that role's action receives immediate feedback (such as for the Seer), it will be displayed next to their target.
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Submitting the form will confirm all actions, process any deaths or additional effects, and proceed to the following day phase.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+### Ending the game
+An alert will display if any of the following win conditions are met:
+- All the werewolves are eliminated (victory for the villagers)
+- The werewolves reach a majority in the village (victory for the wolves)

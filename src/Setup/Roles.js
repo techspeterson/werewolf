@@ -20,7 +20,6 @@ const mapDispatchToProps = {
 class Roles extends React.Component {
   renderRoles = () => {
     const { players } = this.props;
-
     let playersWithRoles = players.filter(player => player.role);
 
     return playersWithRoles.map(player => {
@@ -56,12 +55,6 @@ class Roles extends React.Component {
     this.props.incrementDayAction();
   }
 
-  renderFinaliseRolesButton = () => {
-    return (
-      <button onClick={this.finaliseRoles}>Finalise Roles</button>
-    )
-  }
-
   render() {
     return (
       <div className={styles.subcontainer}>
@@ -70,7 +63,7 @@ class Roles extends React.Component {
         <ul>
           {this.renderRoles()}
         </ul>
-        {this.renderFinaliseRolesButton()}
+        <button onClick={this.finaliseRoles}>Finalise Roles</button>
       </div>
     )
   }
